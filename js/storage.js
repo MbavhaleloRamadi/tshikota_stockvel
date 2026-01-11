@@ -18,7 +18,7 @@ const Storage = {
     MAX_BASE64_SIZE: 800 * 1024,
 
     /**
-     * Allowed file types
+     * Allowed file types (images only - PDFs don't compress well for base64)
      */
     ALLOWED_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
 
@@ -31,8 +31,11 @@ const Storage = {
      */
     async uploadProof(file, reference, onProgress = null) {
         try {
-            // Validate file
-            this.validateFile(file);
+            // Validate file (throws on error)
+            const validation = this.validateFile(file);
+            if (!validation.valid) {
+                throw new Error(validation.error);
+            }
 
             if (onProgress) onProgress(10);
 
@@ -145,21 +148,30 @@ const Storage = {
 
     /**
      * Validate file before upload
+     * Returns {valid: boolean, error: string} for compatibility with submit-pop.js
      * @param {File} file - File to validate
-     * @throws {Error} If validation fails
+     * @returns {object} Validation result {valid: boolean, error?: string}
      */
     validateFile(file) {
         if (!file) {
-            throw new Error('No file provided');
+            return { valid: false, error: 'No file provided' };
         }
 
         if (file.size > this.MAX_FILE_SIZE) {
-            throw new Error(`File too large. Maximum size is ${this.formatFileSize(this.MAX_FILE_SIZE)}`);
+            return { 
+                valid: false, 
+                error: `File too large. Maximum size is ${this.formatFileSize(this.MAX_FILE_SIZE)}` 
+            };
         }
 
         if (!this.ALLOWED_TYPES.includes(file.type)) {
-            throw new Error('Invalid file type. Please upload an image (JPG, PNG, GIF, or WebP)');
+            return { 
+                valid: false, 
+                error: 'Invalid file type. Please upload an image (JPG, PNG, GIF, or WebP)' 
+            };
         }
+
+        return { valid: true };
     },
 
     /**

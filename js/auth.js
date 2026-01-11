@@ -44,6 +44,7 @@ const Auth = {
     async signInAnonymously() {
         try {
             const result = await auth.signInAnonymously();
+            this.currentUser = result.user;
             return result.user;
         } catch (error) {
             console.error('Anonymous sign-in error:', error);
@@ -58,44 +59,100 @@ const Auth = {
      */
     async verifyAdminCode(code) {
         try {
-            // First check Firestore for admin code
-            const settingsDoc = await db.collection('settings').doc('admin').get();
-            
-            let adminCode;
-            if (settingsDoc.exists) {
-                adminCode = settingsDoc.data().adminCode;
-            } else {
-                // Use default code and create settings document
-                adminCode = APP_SETTINGS.defaultAdminCode;
-                await db.collection('settings').doc('admin').set({
-                    adminCode: adminCode,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
+            // IMPORTANT: Sign in anonymously FIRST before any Firestore operations
+            // This is required because Firestore rules need authentication
+            if (!this.currentUser) {
+                console.log('Signing in anonymously first...');
+                await this.signInAnonymously();
             }
 
-            if (code === adminCode) {
-                // Sign in anonymously if not already
-                if (!this.currentUser) {
-                    await this.signInAnonymously();
-                }
+            let adminCode;
+            let settingsDoc;
+            
+            try {
+                // Try to get the admin code from Firestore
+                settingsDoc = await db.collection('settings').doc('admin').get();
+                console.log('Settings doc exists:', settingsDoc.exists);
+            } catch (firestoreError) {
+                // If we can't read from Firestore, use default
+                console.warn('Could not read settings from Firestore:', firestoreError.message);
+                adminCode = APP_SETTINGS.defaultAdminCode;
+            }
+            
+            if (settingsDoc && settingsDoc.exists) {
+                adminCode = settingsDoc.data().adminCode;
+                console.log('Using admin code from Firestore');
+            } else if (!adminCode) {
+                // Document doesn't exist, use default and try to create it
+                adminCode = APP_SETTINGS.defaultAdminCode;
+                console.log('No admin document found, creating with default code...');
                 
+                try {
+                    await db.collection('settings').doc('admin').set({
+                        adminCode: adminCode,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    console.log('Created admin settings document');
+                } catch (writeError) {
+                    console.warn('Could not create admin settings document:', writeError.message);
+                }
+            }
+
+            // Compare codes (trim whitespace)
+            const inputCode = code.trim();
+            const storedCode = (adminCode || '').trim();
+            
+            console.log('Comparing codes...');
+            
+            if (inputCode === storedCode) {
                 // Store admin session
                 this.isAdmin = true;
                 Utils.storage.set('isAdmin', true);
                 Utils.storage.set('adminSessionStart', Date.now());
                 
-                // Log admin login
-                await this.logAdminAction('admin_login', { 
-                    timestamp: new Date().toISOString() 
-                });
+                // Log admin login (don't fail if this doesn't work)
+                try {
+                    await this.logAdminAction('admin_login', { 
+                        timestamp: new Date().toISOString() 
+                    });
+                } catch (logError) {
+                    console.warn('Could not log admin login:', logError.message);
+                }
                 
+                console.log('Admin login successful!');
                 return true;
             }
             
+            console.log('Code mismatch');
             return false;
         } catch (error) {
             console.error('Admin verification error:', error);
             throw error;
+        }
+    },
+
+    /**
+     * Reset admin code to default (useful for recovery)
+     * Call this from browser console: Auth.resetAdminCode()
+     */
+    async resetAdminCode() {
+        try {
+            // Sign in first if needed
+            if (!this.currentUser) {
+                await this.signInAnonymously();
+            }
+            
+            const defaultCode = APP_SETTINGS.defaultAdminCode;
+            await db.collection('settings').doc('admin').set({
+                adminCode: defaultCode,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                resetAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('Admin code has been reset to default:', defaultCode);
+            return true;
+        } catch (error) {
+            console.error('Failed to reset admin code:', error);
+            return false;
         }
     },
 
@@ -165,6 +222,11 @@ const Auth = {
      */
     async lookupMember(name, phone) {
         try {
+            // Sign in anonymously if needed for Firestore access
+            if (!this.currentUser) {
+                await this.signInAnonymously();
+            }
+            
             // Normalize phone number
             const normalizedPhone = phone.replace(/[\s-]/g, '');
             
