@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="View your account - Tshikota Ro Farana Stokvel">
+    <meta name="theme-color" content="#1B5E20">
+    <title>View Account - Tshikota Ro Farana</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <a href="index.html" class="back-button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            <span>Back</span>
+        </a>
+        <h1 class="page-title">View Account</h1>
+        <button class="btn btn-ghost" id="logoutBtn" style="display: none;">Logout</button>
+    </header>
+
+    <!-- Login Section -->
+    <main class="container page-content" id="loginSection">
+        <div class="login-card">
+            <div class="login-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
+            <h2 class="login-title">Access Your Account</h2>
+            <p class="login-subtitle">Enter your details to view your submissions and savings</p>
+
+            <form id="loginForm" class="form" novalidate>
+                <div class="form-group">
+                    <label for="memberName" class="form-label">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="memberName" 
+                        name="memberName" 
+                        class="form-input" 
+                        placeholder="Enter your full name"
+                        required
+                        autocomplete="name"
+                    >
+                    <span class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="memberPhone" class="form-label">Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="memberPhone" 
+                        name="memberPhone" 
+                        class="form-input" 
+                        placeholder="e.g., 0821234567"
+                        required
+                        autocomplete="tel"
+                        pattern="[0-9]{10}"
+                    >
+                    <span class="form-error"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="viewAccountBtn">
+                    <span class="btn-text">View Account</span>
+                    <span class="btn-loading" style="display: none;">
+                        <span class="spinner"></span>
+                        Loading...
+                    </span>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Account Dashboard Section -->
+    <main class="container page-content" id="dashboardSection" style="display: none;">
+        <!-- Welcome Header -->
+        <div class="welcome-header">
+            <div class="member-avatar" id="memberAvatar">TM</div>
+            <div class="welcome-text">
+                <h2 class="welcome-name">Welcome, <span id="memberDisplayName">Member</span></h2>
+                <p class="welcome-status" id="memberStatus">Active Member</p>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <section class="stats-grid">
+            <div class="stat-card stat-primary">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="totalSaved">R 0</span>
+                    <span class="stat-label">Total Saved</span>
+                </div>
+            </div>
+
+            <div class="stat-card stat-warning">
+                <div class="stat-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="totalFines">R 0</span>
+                    <span class="stat-label">Total Fines</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Account Summary -->
+        <section class="summary-card">
+            <h3 class="summary-title">Account Summary</h3>
+            <div class="summary-rows">
+                <div class="summary-row">
+                    <span class="summary-label">Total Contributions</span>
+                    <span class="summary-value" id="totalContributions">R 0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Number of Submissions</span>
+                    <span class="summary-value" id="submissionCount">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Verified Payments</span>
+                    <span class="summary-value" id="verifiedCount">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Pending Review</span>
+                    <span class="summary-value" id="pendingCount">0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interest Eligibility -->
+        <section class="eligibility-card" id="eligibilityCard">
+            <div class="eligibility-icon" id="eligibilityIcon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="8" r="7"/>
+                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+                </svg>
+            </div>
+            <div class="eligibility-content">
+                <h4 class="eligibility-title" id="eligibilityTitle">Interest Eligibility</h4>
+                <p class="eligibility-text" id="eligibilityText">Save R10,000+ to qualify for interest distribution</p>
+                <div class="eligibility-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="eligibilityProgress" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text" id="eligibilityProgressText">R0 / R10,000</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stokvel Total -->
+        <section class="stokvel-total">
+            <div class="stokvel-total-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+            </div>
+            <div class="stokvel-total-content">
+                <span class="stokvel-total-label">Stokvel Account Total</span>
+                <span class="stokvel-total-value" id="stokvelTotal">R 0</span>
+                <span class="stokvel-total-hint">(all members combined)</span>
+            </div>
+        </section>
+
+        <!-- Submissions List -->
+        <section class="submissions-section">
+            <div class="section-header">
+                <h3 class="section-title">Your Submissions</h3>
+                <button class="btn btn-ghost btn-sm" id="refreshSubmissions">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <polyline points="1 20 1 14 7 14"/>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+
+            <!-- Submissions Loading -->
+            <div class="submissions-loading" id="submissionsLoading">
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+            </div>
+
+            <!-- Submissions List -->
+            <div class="submissions-list" id="submissionsList"></div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+                        <polyline points="13 2 13 9 20 9"/>
+                    </svg>
+                </div>
+                <p class="empty-title">No submissions yet</p>
+                <p class="empty-text">Submit your first proof of payment to get started</p>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="submit-pop.html" class="btn btn-primary btn-block">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Submit New Payment
+            </a>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/view-account.js"></script>
+</body>
+</html>

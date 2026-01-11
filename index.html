@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tshikota Ro Farana Stokvel - Community savings management">
+    <meta name="theme-color" content="#1B5E20">
+    <title>Tshikota Ro Farana Stokvel</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-logo">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M40 15 L45 30 H55 L47 40 L52 55 L40 45 L28 55 L33 40 L25 30 H35 Z" fill="currentColor"/>
+                    <circle cx="40" cy="40" r="12" stroke="currentColor" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+            <h1 class="hero-title">Tshikota Ro Farana</h1>
+            <p class="hero-subtitle">Stokvel</p>
+            <p class="hero-tagline">Building wealth together, one month at a time</p>
+        </div>
+    </section>
+
+    <!-- Main Navigation -->
+    <main class="container">
+        <nav class="nav-cards">
+            <!-- POP Submission Card -->
+            <a href="submit-pop.html" class="nav-card">
+                <div class="nav-card-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div class="nav-card-content">
+                    <h2 class="nav-card-title">POP Submission</h2>
+                    <p class="nav-card-description">Upload your proof of payment</p>
+                </div>
+                <div class="nav-card-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- View Account Card -->
+            <a href="view-account.html" class="nav-card">
+                <div class="nav-card-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="nav-card-content">
+                    <h2 class="nav-card-title">View Account</h2>
+                    <p class="nav-card-description">Check your submissions and savings</p>
+                </div>
+                <div class="nav-card-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Admin Card -->
+            <a href="admin/index.html" class="nav-card nav-card-admin">
+                <div class="nav-card-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <div class="nav-card-content">
+                    <h2 class="nav-card-title">Admin</h2>
+                    <p class="nav-card-description">Manage members, approve payments, reports</p>
+                </div>
+                <div class="nav-card-arrow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </a>
+        </nav>
+
+        <!-- Quick Info -->
+        <section class="info-section">
+            <div class="info-box info-box-info">
+                <h3>Monthly Minimum</h3>
+                <p>R300 by the 7th of each month</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Tshikota Ro Farana Stokvel</p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+    <!-- App Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Initialize app on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>
