@@ -101,8 +101,7 @@ Copy the contents of `firebase/firestore.rules` and `firebase/storage.rules` to 
 
 When you first access the admin panel, the system will create initial data structures. The default admin code is:
 
-```
-TSHIKOTA2024
+``
 ```
 
 **⚠️ IMPORTANT: Change this code in Firestore after first login!**
