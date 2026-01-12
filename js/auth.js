@@ -177,6 +177,18 @@ const Auth = {
     },
 
     /**
+     * Force clear admin session (call from console: Auth.clearSession())
+     * Useful for testing or if you want to force re-login
+     */
+    clearSession() {
+        this.isAdmin = false;
+        Utils.storage.remove('isAdmin');
+        Utils.storage.remove('adminSessionStart');
+        console.log('Admin session cleared. Refresh the page to see login screen.');
+        return true;
+    },
+
+    /**
      * Log admin action for audit trail
      * @param {string} action - Action type
      * @param {object} details - Action details
@@ -210,8 +222,8 @@ const Auth = {
         Utils.storage.remove('isAdmin');
         Utils.storage.remove('adminSessionStart');
         
-        // Redirect to home
-        window.location.href = '../index.html';
+        // Don't redirect - let the calling code handle that
+        // This allows the admin page to show the login form again
     },
 
     /**
